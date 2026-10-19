@@ -1,0 +1,64 @@
+# Project-scoped exemption from the machine-wide `minimumReleaseAge` gate in
+# ~/.bunfig.toml.
+#
+# DeepSeek Harness is in developer preview and publishes prereleases constantly
+# (0.1.2-alpha.3 shipped the same day we first pinned it). Typing this plugin
+# against an older version than users actually run is how breakage reaches them
+# instead of CI — see Linear DEV-2459.
+#
+# Scoped deliberately: only @deepseek-ai and @honcho-ai are exempt, and every
+# other dependency still passes the age gate. Two things bound the risk further:
+# every version bun installs here is pinned exactly (the dsh peers are a range,
+# but the devDependencies are not), so a fresh malicious publish
+# cannot be picked up without an explicit edit here; and the @deepseek-ai
+# packages are types-only optional peers, so a bad one fails typecheck rather
+# than shipping.
+#
+# NOTE: a project bunfig REPLACES this key from ~/.bunfig.toml rather than
+# merging, so @honcho-ai/sdk must be restated here or it loses its own global
+# exemption. Regenerate after adding a dsh dependency:
+#   grep -o '"@\(deepseek-ai\|honcho-ai\)/[a-z0-9.-]*"' bun.lock | sort -u
+[install]
+minimumReleaseAgeExcludes = [
+  "@deepseek-ai/cordis",
+  "@deepseek-ai/cordis-plugin-include",
+  "@deepseek-ai/cordis-plugin-loader",
+  "@deepseek-ai/cosmokit",
+  "@deepseek-ai/dsh-agent",
+  "@deepseek-ai/dsh-attachment",
+  "@deepseek-ai/dsh-brand",
+  "@deepseek-ai/dsh-code-runtime",
+  "@deepseek-ai/dsh-commands",
+  "@deepseek-ai/dsh-compaction",
+  "@deepseek-ai/dsh-compaction-image-offload",
+  "@deepseek-ai/dsh-invariants",
+  "@deepseek-ai/dsh-llm",
+  "@deepseek-ai/dsh-ptc-runtime",
+  "@deepseek-ai/dsh-sandbox",
+  "@deepseek-ai/dsh-sandbox-policy",
+  "@deepseek-ai/dsh-scope",
+  "@deepseek-ai/dsh-session",
+  "@deepseek-ai/dsh-session-format",
+  "@deepseek-ai/dsh-session-format-catalog",
+  "@deepseek-ai/dsh-session-format-v0-to-v1",
+  "@deepseek-ai/dsh-session-format-v1-to-v2",
+  "@deepseek-ai/dsh-session-format-v2-to-v3",
+  "@deepseek-ai/dsh-session-format-v3-to-v4",
+  "@deepseek-ai/dsh-session-persistence",
+  "@deepseek-ai/dsh-session-projection",
+  "@deepseek-ai/dsh-session-projection-cache",
+  "@deepseek-ai/dsh-session-query",
+  "@deepseek-ai/dsh-session-title",
+  "@deepseek-ai/dsh-system-prompt",
+  "@deepseek-ai/dsh-timeout",
+  "@deepseek-ai/dsh-tool-todo",
+  "@deepseek-ai/dsh-tools",
+  "@deepseek-ai/dsh-typert-protocol",
+  "@deepseek-ai/dsh-user-approval",
+  "@deepseek-ai/dsh-util-crypto",
+  "@deepseek-ai/dsh-util-values",
+  "@deepseek-ai/schemastery",
+  "@honcho-ai/dsh-honcho",
+  "@honcho-ai/harness-plugin-core",
+  "@honcho-ai/sdk"
+]
